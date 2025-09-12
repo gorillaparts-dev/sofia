@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Подарок на 8 лет — интерактивная открытка</title>
+<style>
+  :root{
+    --bg:#fff7ff;
+    --ink:#1f2a44;
+    --accent:#ff6ec7;
+    --accent2:#7afcff;
+    --accent3:#ffe45e;
+    --good:#5ce1e6;
+    --btn:#5b5bd6;
+  }
+  *{box-sizing:border-box}
+  html,body{height:100%}
+  body{
+    margin:0;
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+    background: radial-gradient(1200px 800px at 10% 10%, var(--accent2) 0%, transparent 40%),
+                radial-gradient(900px 700px at 90% 20%, var(--accent3) 0%, transparent 45%),
+                radial-gradient(1200px 800px at 30% 90%, #ffd3e8 0%, transparent 40%), var(--bg);
+    color:var(--ink);
+  }
+  .container{max-width:1100px;margin:0 auto;padding:20px}
+  header{
+    text-align:center;
+    padding:32px 16px 8px;
+  }
+  h1{
+    font-size: clamp(28px, 4vw, 44px);
+    line-height:1.1;
+    margin:0;
+  }
+  .sub{
+    margin-top:10px;
+    font-size: clamp(16px, 2vw, 20px);
+    opacity:.85;
+  }
+  .card{
+    backdrop-filter: blur(8px);
+    background: rgba(255,255,255,.7);
+    border: 2px solid rgba(0,0,0,.06);
+    border-radius: 16px;
+    padding: 18px;
+    box-shadow: 0 10px 30px rgba(31,42,68,.08);
+  }
+
+  /* Name input area */
+  .intro{
+    display:grid;
+    grid-template-columns: 1fr;
+    gap:16px;
+    align-items:center;
+    margin: 16px auto 24px;
+    max-width: 720px;
+  }
+  .intro .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+  input[type="text"]{
+    padding:14px 16px;
+    border-radius: 12px;
+    border:2px solid rgba(0,0,0,.1);
+    width:min(420px, 90vw);
+    font-size:16px;
+    outline:none;
+  }
+  button{
+    cursor:pointer;
+    border:none;
+    padding:14px 18px;
+    border-radius:12px;
+    background:linear-gradient(135deg, var(--btn), #7f7fff);
+    color:white;
+    font-weight:700;
+    letter-spacing:.2px;
+    box-shadow: 0 8px 20px rgba(91,91,214,.35);
+    transition: transform .08s ease;
+  }
+  button:active{transform: translateY(1px)}
+
+  /* Characters grid */
+  .grid{
+    display:grid;
+    grid-template-columns: repeat( auto-fit, minmax(180px, 1fr) );
+    gap:18px;
+    margin-top: 10px;
+  }
+  .character{
+    position:relative;
+    overflow:hidden;
+    padding:16px;
+    text-align:center;
+    isolation:isolate;
+  }
+  .bubble{
+    position:absolute;
+    inset:4px;
+    border-radius:20px;
+    background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.65));
+    border:2px solid rgba(31,42,68,.08);
+    z-index:1;
+  }
+  .badge{
+    position:absolute;top:10px;left:10px;
+    background: #00000012;
+    padding:6px 10px;
+    border-radius:999px;
+    font-size:12px;
+    z-index:2;
+  }
+  .sprite{
+    position:relative;
+    z-index:3;
+    width:140px;height:140px;
+    margin: 28px auto 8px;
+    display:grid;place-items:center;
+    border-radius:24px;
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,.06), 0 8px 18px rgba(0,0,0,.08);
+    transition: transform .18s ease;
+    background: white;
+  }
+  .sprite:hover{ transform: translateY(-2px) scale(1.02); }
+  .label{font-weight:800;margin-top:6px}
+  .cta{
+    text-align:center;
+    margin: 24px 0 6px;
+    font-weight:700;
+  }
+
+  /* Speech pop */
+  .speech{
+    position:absolute;
+    left:50%; top:8px;
+    transform: translateX(-50%) scale(.9);
+    opacity:0;
+    pointer-events:none;
+    background:white;
+    border-radius:12px;
+    border:2px solid rgba(0,0,0,.08);
+    padding:10px 12px;
+    font-size:14px;
+    width:min(260px, 80vw);
+    box-shadow: 0 10px 24px rgba(31,42,68,.12);
+    z-index:5;
+  }
+  .speech.show{ 
+    animation: pop .9s cubic-bezier(.2,.9,.2,1);
+  }
+  @keyframes pop{
+    0%{opacity:0; transform: translateX(-50%) translateY(8px) scale(.95)}
+    12%{opacity:1}
+    100%{opacity:1; transform: translateX(-50%) translateY(0) scale(1)}
+  }
+
+  /* Final section */
+  .final{
+    margin: 30px 0 12px;
+    padding: 24px 14px 28px;
+    text-align:center;
+    position:relative;
+    overflow:hidden;
+  }
+  .final h2{
+    font-size: clamp(26px, 3.6vw, 40px);
+    margin: 6px 0 8px;
+  }
+  .final .sub2{opacity:.9}
+  .hidden{display:none}
+
+  /* confetti canvas overlays the final section */
+  #confettiCanvas{
+    position:absolute; inset:0; pointer-events:none;
+  }
+
+  /* Helpers for sprites (simple SVG shapes + emojis) */
+  .emoji{font-size:64px;line-height:1}
+  svg{display:block}
+</style>
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>🎁 Подарок для самой счастливой девочки на 8 лет!</h1>
+      <p class="sub">Нажимай на персонажей — каждый из них приготовил для тебя тёплое пожелание и маленькое чудо ✨</p>
+    </header>
+
+    <!-- Intro / Name -->
+    <section class="card intro">
+      <div class="row">
+        <input id="childName" type="text" placeholder="Введи имя именинницы (например: Алина)" aria-label="Имя девочки">
+        <button id="startBtn" type="button">Начать праздник ✨</button>
+      </div>
+      <p style="margin:0; text-align:center; font-size:14px; opacity:.85">Имя можно изменить в любой момент.</p>
+    </section>
+
+    <!-- Characters -->
+    <section class="grid" id="grid">
+      <!-- LABUBU -->
+      <article class="character card" data-name="labubu">
+        <div class="bubble"></div>
+        <div class="badge">🐰 Labubu</div>
+        <div class="speech" id="speech-labubu">С Днём Рождения, <span class="n"></span>! Пусть у тебя будет море улыбок и сладостей! 🍭</div>
+        <div class="sprite" data-anim="bounce">
+          <!-- Simple bunny-like SVG -->
+          <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+            <defs>
+              <linearGradient id="lg1" x1="0" x2="1">
+                <stop offset="0%" stop-color="#ffe3f3"/><stop offset="100%" stop-color="#fff"/>
+              </linearGradient>
+            </defs>
+            <ellipse cx="60" cy="70" rx="36" ry="30" fill="url(#lg1)" />
+            <ellipse cx="40" cy="28" rx="12" ry="24" fill="#fff1f8" />
+            <ellipse cx="80" cy="28" rx="12" ry="24" fill="#fff1f8" />
+            <circle cx="48" cy="68" r="3" fill="#333"/>
+            <circle cx="72" cy="68" r="3" fill="#333"/>
+            <path d="M50 80 Q60 88 70 80" stroke="#333" stroke-width="3" fill="none" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div class="label">Labubu</div>
+        <div class="cta">Нажми меня!</div>
+      </article>
+
+      <!-- STITCH -->
+      <article class="character card" data-name="stitch">
+        <div class="bubble"></div>
+        <div class="badge">🌌 Стич</div>
+        <div class="speech" id="speech-stitch"><span class="n"></span>, ты уникальная и очень крутая! Оставайся всегда такой же яркой! ⭐</div>
+        <div class="sprite" data-anim="wiggle">
+          <!-- simple alien-ish SVG -->
+          <svg viewBox="0 0 120 120" width="120" height="120" aria-hidden="true">
+            <defs>
+              <linearGradient id="lg2" x1="0" x2="1">
+                <stop offset="0%" stop-color="#d7f7ff"/><stop offset="100%" stop-color="#ffffff"/>
+              </linearGradient>
+            </defs>
+            <ellipse cx="60" cy="70" rx="38" ry="28" fill="url(#lg2)"/>
+            <circle cx="44" cy="70" r="8" fill="#2c3e50"/>
+            <circle cx="76" cy="70" r="8" fill="#2c3e50"/>
+            <rect x="48" y="84" width="24" height="6" rx="3" fill="#2c3e50"/>
+            <ellipse cx="28" cy="48" rx="12" ry="6" fill="#d7f7ff"/>
+            <ellipse cx="92" cy="48" rx="12" ry="6" fill="#d7f7ff"/>
+          </svg>
+        </div>
+        <div class="label">Стич</div>
+        <div class="cta">Нажми меня!</div>
+      </article>
+
+      <!-- DOG -->
+      <article class="character card" data-name="dog">
+        <div class="bubble"></div>
+        <div class="badge">🐶 Собака</div>
+        <div class="speech" id="speech-dog">Гав-гав! Дорогая <span class="n"></span>, верные друзья всегда рядом! 🐾</div>
+        <div class="sprite" data-anim="bounce">
+          <div class="emoji" aria-hidden="true">🐶</div>
+        </div>
+        <div class="label">Собака</div>
+        <div class="cta">Нажми меня!</div>
+      </article>
+
+      <!-- TURTLE -->
+      <article class="character card" data-name="turtle">
+        <div class="bubble"></div>
+        <div class="badge">🐢 Черепаха</div>
+        <div class="speech" id="speech-turtle">Пусть мечты сбываются шаг за шагом, но уверенно, <span class="n"></span>! 💚</div>
+        <div class="sprite" data-anim="wiggle">
+          <div class="emoji" aria-hidden="true">🐢</div>
+        </div>
+        <div class="label">Черепаха</div>
+        <div class="cta">Нажми меня!</div>
+      </article>
+
+      <!-- PARROT -->
+      <article class="character card" data-name="parrot">
+        <div class="bubble"></div>
+        <div class="badge">🦜 Попугай</div>
+        <div class="speech" id="speech-parrot">Поздравляю, <span class="n"></span>! Желаю веселья, радости и ярких приключений! 🎉</div>
+        <div class="sprite" data-anim="bounce">
+          <div class="emoji" aria-hidden="true">🦜</div>
+        </div>
+        <div class="label">Попугай</div>
+        <div class="cta">Нажми меня!</div>
+      </article>
+    </section>
+
+    <!-- Final -->
+    <section class="card final hidden" id="final">
+      <canvas id="confettiCanvas"></canvas>
+      <h2>🎂 С Днём Рождения, <span id="finalName">принцесса</span>!</h2>
+      <p class="sub2">Ты самая чудесная 8-летняя! Пусть каждый день будет полон улыбок, игр и открытий ✨</p>
+      <p style="margin-top:12px; font-size:14px; opacity:.8">Нажми на персонажей ещё раз — у них всегда есть добрые слова 💖</p>
+    </section>
+
+    <footer style="text-align:center; padding: 14px; opacity:.7">
+      <small>Демо-страница. Изображения персонажей стилизованы и упрощены. Можно заменить на ваши картинки (PNG/SVG/GIF).</small>
+    </footer>
+  </div>
+
+<script>
+  const nameInput = document.getElementById('childName');
+  const startBtn = document.getElementById('startBtn');
+  const grid = document.getElementById('grid');
+  const final = document.getElementById('final');
+  const finalName = document.getElementById('finalName');
+
+  // Safe name getter
+  function getName(){
+    const v = (nameInput.value || '').trim();
+    return v.length ? v : 'Принцесса';
+    }
+
+  // Insert name into all .n spans
+  function updateNames(){
+    document.querySelectorAll('.n').forEach(el=> el.textContent = getName());
+    finalName.textContent = getName();
+  }
+  nameInput.addEventListener('input', updateNames);
+
+  // Start button: first confetti teaser + focus grid
+  startBtn.addEventListener('click', ()=>{
+    updateNames();
+    grid.scrollIntoView({behavior:'smooth', block:'start'});
+    pulseCard(grid.querySelector('.character'));
+  });
+
+  // Sprite animations
+  function bounce(el){
+    el.animate([
+      { transform:'translateY(0) scale(1)' },
+      { transform:'translateY(-8px) scale(1.03)' },
+      { transform:'translateY(0) scale(1)' }
+    ], { duration:500, easing:'cubic-bezier(.2,.9,.2,1)' });
+  }
+  function wiggle(el){
+    el.animate([
+      { transform:'rotate(0deg)' },
+      { transform:'rotate(-7deg)' },
+      { transform:'rotate(7deg)' },
+      { transform:'rotate(0deg)' }
+    ], { duration:500, easing:'ease-in-out' });
+  }
+  function pulseCard(card){
+    card.animate([
+      { transform:'scale(1)' },
+      { transform:'scale(1.02)' },
+      { transform:'scale(1)' }
+    ], { duration:400, easing:'ease-out' });
+  }
+
+  // Click handling
+  const chars = document.querySelectorAll('.character');
+  let clickedSet = new Set();
+  chars.forEach(card => {
+    const sprite = card.querySelector('.sprite');
+    const speech = card.querySelector('.speech');
+    sprite.addEventListener('click', ()=>{
+      const anim = sprite.dataset.anim;
+      if(anim==='bounce') bounce(sprite); else wiggle(sprite);
+
+      // show speech bubble briefly
+      speech.classList.remove('show');
+      // Force reflow to restart animation
+      void speech.offsetWidth;
+      speech.querySelectorAll('.n').forEach(el=> el.textContent = getName());
+      speech.classList.add('show');
+      setTimeout(()=>{ speech.classList.remove('show'); }, 2800);
+
+      clickedSet.add(card.dataset.name);
+      checkFinal();
+    });
+  });
+
+  function checkFinal(){
+    // When all characters clicked at least once, reveal the final block with confetti
+    if(clickedSet.size >= document.querySelectorAll('.character').length){
+      if(final.classList.contains('hidden')){
+        final.classList.remove('hidden');
+        final.scrollIntoView({behavior:'smooth', block:'center'});
+        launchConfetti();
+      } else {
+        // additional small burst if already visible
+        launchConfetti(120);
+      }
+    }
+  }
+
+  // Simple confetti
+  function launchConfetti(particles=220){
+    const c = document.getElementById('confettiCanvas');
+    const ctx = c.getContext('2d');
+    const rect = c.parentElement.getBoundingClientRect();
+    c.width = rect.width; c.height = rect.height;
+    const cols = ['#ff6ec7','#7afcff','#ffe45e','#5ce1e6','#9b7bff','#ffb86b'];
+    const confs = [...Array(particles)].map(()=> ({
+      x: Math.random()*c.width,
+      y: -10 - Math.random()*c.height*0.2,
+      r: 2 + Math.random()*4,
+      vx: -1 + Math.random()*2,
+      vy: 1 + Math.random()*2.5,
+      rot: Math.random()*360,
+      vr: -4 + Math.random()*8,
+      color: cols[Math.floor(Math.random()*cols.length)],
+      shape: Math.random() < .5 ? 'rect' : 'circ'
+    }));
+    let t=0, maxT=200;
+
+    function step(){
+      ctx.clearRect(0,0,c.width,c.height);
+      confs.forEach(p=>{
+        p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr;
+        ctx.save();
+        ctx.translate(p.x,p.y);
+        ctx.rotate(p.rot * Math.PI/180);
+        ctx.fillStyle=p.color;
+        if(p.shape==='rect'){
+          ctx.fillRect(-p.r,-p.r, p.r*2, p.r*2);
+        } else {
+          ctx.beginPath(); ctx.arc(0,0,p.r,0,Math.PI*2); ctx.fill();
+        }
+        ctx.restore();
+      });
+      t++;
+      if(t<maxT) requestAnimationFrame(step);
+    }
+    step();
+  }
+
+  // Initialize displayed names
+  updateNames();
+</script>
+</body>
+</html>
