@@ -232,7 +232,7 @@
       speech.classList.remove('show'); void speech.offsetWidth;
       speech.querySelectorAll('.n').forEach(el=> el.textContent = getName());
       speech.classList.add('show');
-      setTimeout(()=>{ speech.classList.remove('show'); }, 2800);
+      setTimeout(()=>{ speech.classList.remove('show'); }, 5000);
       clickedSet.add(card.dataset.name);
       checkFinal();
     }
