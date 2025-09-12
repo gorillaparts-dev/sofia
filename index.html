@@ -127,7 +127,7 @@
 
     <section class="card intro">
       <div class="row">
-        <input id="childName" type="text" placeholder="Софа =) ВВеди свое Имя" aria-label="Имя девочки">
+        <input id="childName" type="text" placeholder="София =) Введи свое Имя и нажми начать праздник" aria-label="Имя девочки">
         <button id="startBtn" type="button">Начать праздник ✨</button>
       </div>
       <p style="margin:0; text-align:center; font-size:14px; opacity:.85"></p>
@@ -232,7 +232,7 @@
       speech.classList.remove('show'); void speech.offsetWidth;
       speech.querySelectorAll('.n').forEach(el=> el.textContent = getName());
       speech.classList.add('show');
-      setTimeout(()=>{ speech.classList.remove('show'); }, 5000);
+      setTimeout(()=>{ speech.classList.remove('show'); }, 10000);
       clickedSet.add(card.dataset.name);
       checkFinal();
     }
