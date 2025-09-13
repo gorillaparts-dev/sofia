@@ -100,13 +100,13 @@
 
   .speech{
     position:absolute; left:50%; top:8px; transform: translateX(-50%) scale(.9);
-    opacity:0; pointer-events:none; background:white;border-radius:12px;
+    opacity:1; pointer-events:none; background:white;border-radius:12px;
     border:2px solid rgba(0,0,0,.08); padding:10px 12px; font-size:14px;
     width:min(260px, 80vw); box-shadow: 0 10px 24px rgba(31,42,68,.12); z-index:5;
   }
   .speech.show{ animation: pop .9s cubic-bezier(.2,.9,.2,1); }
   @keyframes pop{
-    0%{opacity:0; transform: translateX(-50%) translateY(8px) scale(.95)}
+    0%{opacity:1; transform: translateX(-50%) translateY(8px) scale(.95)}
     12%{opacity:1}
     100%{opacity:1; transform: translateX(-50%) translateY(0) scale(1)}
   }
