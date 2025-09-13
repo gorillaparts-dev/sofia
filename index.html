@@ -106,7 +106,7 @@
   }
   .speech.show{ animation: pop .9s cubic-bezier(.2,.9,.2,1); }
   @keyframes pop{
-    0%{opacity:1; transform: translateX(-50%) translateY(8px) scale(.95)}
+    0%{opacity:0; transform: translateX(-50%) translateY(8px) scale(.95)}
     12%{opacity:1}
     100%{opacity:1; transform: translateX(-50%) translateY(0) scale(1)}
   }
@@ -231,7 +231,7 @@
   if(anim==='bounce') bounce(sprite); else wiggle(sprite);
   speech.classList.remove('show'); void speech.offsetWidth; // перезапуск анимации по желанию
 speech.querySelectorAll('.n').forEach(el=> el.textContent = getName());
-speech.classList.add('show');
+speech.classList.toggle('show');
   // удаляем автоскрытие, чтобы он оставался видимым
   clickedSet.add(card.dataset.name);
   checkFinal();
