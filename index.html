@@ -3,21 +3,13 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Подарок Софии на 8 лет — интерактивная открытка</title>
+<title>Подарок на 8 лет — без скрытия текста</title>
 <style>
-  :root{
-    --bg:#fff7ff;
-    --ink:#1f2a44;
-    --accent:#ff6ec7;
-    --accent2:#7afcff;
-    --accent3:#ffe45e;
-    --btn:#5b5bd6;
-  }
+  :root{ --bg:#fff7ff; --ink:#1f2a44; --accent:#ff6ec7; --accent2:#7afcff; --accent3:#ffe45e; --btn:#5b5bd6; }
   *{box-sizing:border-box}
   html,body{height:100%}
   body{
-    margin:0;
-    font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
+    margin:0;font-family: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, "Noto Sans", "Apple Color Emoji","Segoe UI Emoji", "Segoe UI Symbol", "Noto Color Emoji", sans-serif;
     background: radial-gradient(1200px 800px at 10% 10%, var(--accent2) 0%, transparent 40%),
                 radial-gradient(900px 700px at 90% 20%, var(--accent3) 0%, transparent 45%),
                 radial-gradient(1200px 800px at 30% 90%, #ffd3e8 0%, transparent 40%), #fff7ff;
@@ -27,88 +19,40 @@
   header{text-align:center;padding:32px 16px 8px;}
   h1{font-size: clamp(28px, 4vw, 44px);line-height:1.1;margin:0;}
   .sub{margin-top:10px;font-size: clamp(16px, 2vw, 20px);opacity:.85;}
-  .card{
-    backdrop-filter: blur(8px);
-    background: rgba(255,255,255,.7);
-    border: 2px solid rgba(0,0,0,.06);
-    border-radius: 16px;
-    padding: 18px;
-    box-shadow: 0 10px 30px rgba(31,42,68,.08);
-  }
-  .intro{
-    display:grid;grid-template-columns: 1fr;gap:16px;align-items:center;
-    margin: 16px auto 24px;max-width: 720px;
-  }
+  .card{backdrop-filter: blur(8px);background: rgba(255,255,255,.7);border: 2px solid rgba(0,0,0,.06);
+    border-radius: 16px;padding: 18px;box-shadow: 0 10px 30px rgba(31,42,68,.08);}
+  .intro{display:grid;grid-template-columns: 1fr;gap:16px;align-items:center;margin: 16px auto 24px;max-width: 720px;}
   .intro .row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
-  input[type="text"]{
-    padding:14px 16px;border-radius: 12px;border:2px solid rgba(0,0,0,.1);
-    width:min(420px, 90vw);font-size:16px;outline:none;
-  }
-  button{
-    cursor:pointer;border:none;padding:14px 18px;border-radius:12px;
-    background:linear-gradient(135deg, var(--btn), #7f7fff);
-    color:white;font-weight:700;letter-spacing:.2px;
-    box-shadow: 0 8px 20px rgba(91,91,214,.35);
-    transition: transform .08s ease;
-  }
+  input[type="text"]{padding:14px 16px;border-radius: 12px;border:2px solid rgba(0,0,0,.1);
+    width:min(420px, 90vw);font-size:16px;outline:none;}
+  button{cursor:pointer;border:none;padding:14px 18px;border-radius:12px;background:linear-gradient(135deg, var(--btn), #7f7fff);
+    color:white;font-weight:700;letter-spacing:.2px;box-shadow: 0 8px 20px rgba(91,91,214,.35);transition: transform .08s ease;}
   button:active{transform: translateY(1px)}
-
-  .grid{
-    display:grid;
-    grid-template-columns: repeat( auto-fit, minmax(220px, 1fr) );
-    gap:18px;
-    margin-top: 10px;
-  }
-  .character{
-    position:relative;
-    display:flex;
-    flex-direction:column;
-    align-items:center;
-    justify-content:flex-start;
-    min-height: 320px;
-    text-align:center;
-    isolation:isolate;
-    transition: transform .12s ease, box-shadow .12s ease;
-  }
-  .character:focus-within,
+  .grid{display:grid;grid-template-columns: repeat( auto-fit, minmax(220px, 1fr) );gap:18px;margin-top: 10px;}
+  .character{position:relative;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;min-height: 320px;text-align:center;isolation:isolate;transition: transform .12s ease, box-shadow .12s ease;}
   .character:hover{ box-shadow: 0 14px 36px rgba(31,42,68,.12); }
-  .bubble{
-    position:absolute;inset:4px;border-radius:20px;
-    background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.65));
-    border:2px solid rgba(31,42,68,.08);z-index:1;
-  }
-  .badge{
-    position:absolute;top:10px;left:10px;
-    background: #00000012;padding:6px 10px;border-radius:999px;font-size:12px;z-index:2;
-  }
-  .sprite{
-    position:relative;z-index:3;
-    width:180px;height:180px;
-    margin: 28px auto 8px;display:grid;place-items:center;border-radius:24px;
-    box-shadow: inset 0 0 0 2px rgba(0,0,0,.06), 0 8px 18px rgba(0,0,0,.08);
-    background:white;transition: transform .18s ease;
-  }
-  .sprite:hover{ transform: translateY(-2px) scale(1.02); }
+  .bubble{position:absolute;inset:4px;border-radius:20px;background: linear-gradient(180deg, rgba(255,255,255,.85), rgba(255,255,255,.65));
+    border:2px solid rgba(31,42,68,.08);z-index:1;}
+  .badge{position:absolute;top:10px;left:10px;background: #00000012;padding:6px 10px;border-radius:999px;font-size:12px;z-index:2;}
+  .sprite{position:relative;z-index:3;width:180px;height:180px;margin: 28px auto 8px;display:grid;place-items:center;border-radius:24px;
+    box-shadow: inset 0 0 0 2px rgba(0,0,0,.06), 0 8px 18px rgba(0,0,0,.08);background:white;transition: transform .18s ease;}
   .sprite img{width:100%;height:100%;object-fit:contain;display:block;}
   .label{font-weight:800;margin-top:6px;z-index:3}
   .cta{ text-align:center;margin: 8px 0 0;font-weight:700;z-index:3}
-  .hit{
-    position:absolute; inset:0; z-index:4; border-radius:16px;
-    background: transparent; border:0; cursor:pointer;
-  }
+  .hit{position:absolute; inset:0; z-index:4; border-radius:16px;background: transparent; border:0; cursor:pointer;}
   .hit:focus{ outline: 3px solid #7f7fff; outline-offset: -2px; border-radius:16px; }
 
+  /* --- ВАЖНО: простая и надёжная логика видимости без keyframes --- */
   .speech{
-    position:absolute; left:50%; top:8px; transform: translateX(-50%) scale(.9);
+    position:absolute; left:50%; top:8px; transform: translateX(-50%);
     opacity:0; pointer-events:none; background:white;border-radius:12px;
     border:2px solid rgba(0,0,0,.08); padding:10px 12px; font-size:14px;
     width:min(260px, 80vw); box-shadow: 0 10px 24px rgba(31,42,68,.12); z-index:5;
+    transition: opacity .2s ease; /* плавное появление/исчезновение */
   }
-  .speech.show{ animation: pop .9s cubic-bezier(.2,.9,.2,1); }
-  @keyframes pop{
-    0%{opacity:0; transform: translateX(-50%) translateY(8px) scale(.95)}
-    12%{opacity:1}
-    100%{opacity:1; transform: translateX(-50%) translateY(0) scale(1)}
+  .speech.show{
+    opacity:1;
+    pointer-events:auto;
   }
 
   .final{ margin: 30px 0 12px; padding: 24px 14px 28px; text-align:center; position:relative; overflow:hidden;}
@@ -124,10 +68,9 @@
       <h1>🎁 Подарок для самой счастливой девочки на 8 лет!</h1>
       <p class="sub">Нажимай на персонажей — каждый из них приготовил для тебя тёплое пожелание и маленькое чудо ✨</p>
     </header>
-
     <section class="card intro">
       <div class="row">
-        <input id="childName" type="text" placeholder="София,введи свое Имя и нажми начать" aria-label="Имя девочки">
+        <input id="childName" type="text" placeholder="София,введи свое Имя и нажми начать праздник" aria-label="Имя девочки">
         <button id="startBtn" type="button">Начать праздник ✨</button>
       </div>
       <p style="margin:0; text-align:center; font-size:14px; opacity:.85"></p>
@@ -194,7 +137,6 @@
   nameInput.addEventListener('input', updateNames);
   startBtn.addEventListener('click', ()=>{ updateNames(); grid.scrollIntoView({behavior:'smooth', block:'start'}); });
 
-  // SOUND with WebAudio
   let audioCtx;
   function playClick(){
     try{
@@ -226,16 +168,16 @@
     const speech = card.querySelector('.speech');
     const hit = card.querySelector('.hit');
     function handle(){
-  playClick();
-  const anim = sprite.dataset.anim;
-  if(anim==='bounce') bounce(sprite); else wiggle(sprite);
-  speech.classList.remove('show'); void speech.offsetWidth; // перезапуск анимации по желанию
-speech.querySelectorAll('.n').forEach(el=> el.textContent = getName());
-speech.classList.toggle('show');
-  // удаляем автоскрытие, чтобы он оставался видимым
-  clickedSet.add(card.dataset.name);
-  checkFinal();
-}
+      playClick();
+      const anim = sprite.dataset.anim;
+      if(anim==='bounce') bounce(sprite); else wiggle(sprite);
+
+      // Показать и оставить навсегда
+      speech.classList.add('show');
+
+      clickedSet.add(card.dataset.name);
+      checkFinal();
+    }
     hit.addEventListener('click', handle);
     hit.addEventListener('keydown', (e)=>{ if(e.key==='Enter' || e.key===' '){ e.preventDefault(); handle(); }});
   });
@@ -245,39 +187,9 @@ speech.classList.toggle('show');
       if(final.classList.contains('hidden')){
         final.classList.remove('hidden');
         final.scrollIntoView({behavior:'smooth', block:'center'});
-        launchConfetti();
-      } else { launchConfetti(120); }
+      }
     }
   }
-
-  function launchConfetti(particles=220){
-    const c = document.getElementById('confettiCanvas');
-    const ctx = c.getContext('2d');
-    const rect = c.parentElement.getBoundingClientRect();
-    c.width = rect.width; c.height = rect.height;
-    const cols = ['#ff6ec7','#7afcff','#ffe45e','#5b5bd6','#9b7bff','#ffb86b'];
-    const confs = [...Array(particles)].map(()=> ({
-      x: Math.random()*c.width, y: -10 - Math.random()*c.height*0.2,
-      r: 2 + Math.random()*4, vx: -1 + Math.random()*2, vy: 1 + Math.random()*2.5,
-      rot: Math.random()*360, vr: -4 + Math.random()*8, color: cols[Math.floor(Math.random()*cols.length)],
-      shape: Math.random() < .5 ? 'rect' : 'circ'
-    }));
-    let t=0, maxT=200;
-    function step(){
-      ctx.clearRect(0,0,c.width,c.height);
-      confs.forEach(p=>{
-        p.x+=p.vx; p.y+=p.vy; p.rot+=p.vr;
-        ctx.save(); ctx.translate(p.x,p.y); ctx.rotate(p.rot * Math.PI/180);
-        ctx.fillStyle=p.color;
-        if(p.shape==='rect'){ ctx.fillRect(-p.r,-p.r, p.r*2, p.r*2); }
-        else { ctx.beginPath(); ctx.arc(0,0,p.r,0,Math.PI*2); ctx.fill(); }
-        ctx.restore();
-      });
-      t++; if(t<maxT) requestAnimationFrame(step);
-    }
-    step();
-  }
-
   updateNames();
 </script>
 </body>
