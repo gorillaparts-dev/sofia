@@ -229,9 +229,9 @@
   playClick();
   const anim = sprite.dataset.anim;
   if(anim==='bounce') bounce(sprite); else wiggle(sprite);
-  speech.classList.remove('show'); void speech.offsetWidth;
-  speech.querySelectorAll('.n').forEach(el=> el.textContent = getName());
-  speech.classList.add('show'); // теперь текст покажется
+  speech.classList.remove('show'); void speech.offsetWidth; // перезапуск анимации по желанию
+speech.querySelectorAll('.n').forEach(el=> el.textContent = getName());
+speech.classList.add('show');
   // удаляем автоскрытие, чтобы он оставался видимым
   clickedSet.add(card.dataset.name);
   checkFinal();
